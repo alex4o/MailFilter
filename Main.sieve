@@ -39,14 +39,17 @@ if allof(
 
 ## Flag: |UniqueId:2|Rulename: Filter into folders
 if allof( 
-    address :user :regex "To" "(.+)",
+    anyof(
+		address :user :regex "To" "(.+)",
+		address :user :regex "To" "(.+)\."
+	),
 	# I would like some of my mail to go the the inbox directly
     not address :user :matches "To" ["aleks*","alex*"])
 {
 	# Store the user part
 	set "user" "${1}";
 	# check if the detail is not empty
-	if address :detail :regex "To" "(.+)" 	{
+	if anyof(address :detail :regex "To" "(.+)", address :detail :regex "To" "(.+)\.")	{
 		# Store into a subfolder of the user folder
 		# I also want to create that subfilder if it doesn't exist
 		# I would like to store the mail in the Inbox if the user folder doesn't exist but this looks sufficient for now
